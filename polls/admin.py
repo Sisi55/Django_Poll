@@ -26,6 +26,9 @@ class QuestionAdmin(admin.ModelAdmin):
     # 클래스 변수/함수 가능 ?
 
     inlines = [ChoiceInline]
+    
+    list_filter = ['pub_date']
+    search_fields = ['question_text']
 
 
 admin.site.register(Question, QuestionAdmin)
