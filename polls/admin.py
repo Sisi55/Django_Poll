@@ -3,12 +3,15 @@ from django.contrib import admin
 from polls.models import Question, Choice
 
 
-class ChoiceInline(admin.StackedInline):
+class ChoiceInline(admin.TabularInline):
     """
     답변 항목도 같이 등록하고 수정할 수 있게 추가한다.
     Choice 모델을 위한 옵션 클래스를 만드는데
     StackedInline 클래스를 상속받는다
     만든 클래스를 QustionAdmin 클래스의 inlines 클래스 변수에 추가한다
+    
+    StackedInline은 화면이 아래로 길어지므로 불편하다.
+    TabularInline은 인라인 아이템을 테이블 형식으로 보여준다
     """
     model = Choice
     extra = 3  # 화면에서 몇 개가 보이는지 ?
