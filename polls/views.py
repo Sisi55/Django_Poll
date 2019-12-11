@@ -1,28 +1,31 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
+from django.views import generic
 
 from polls.models import Question, Choice
 
 
-def index(request):
-    latest_question_list = Question.objects.order_by(
-        '-pub_date'
-    )[:5]
-    context = {
-        'latest_question_list': latest_question_list,
-    }
-    return render(request, 'polls/index.html', context)
+class IndexView(generic.ListView):
+    template_name = 'polls/index.html'
+    context_object_name = 'lastest_question_list'
+
+    def get_queryset(self):
+        """
+        어느 시점에 호출될까 ? 일단, get_template_name() 할 때
+        :return:
+        """
+        return Question.objects.order_by('-pub_date')[:5]
 
 
-def detail(request, question_id):  # detail -> vote
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/detail.html', {'question': question})
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = 'polls/detail.html'
 
 
-def results(request, question_id):  # results -> detail
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/results.html', {'question': question})
+class ResultsView(generic.DetailView):
+    model = Question
+    template_name = 'polls/results.html'
 
 
 def vote(request, question_id):  # vote --> results
