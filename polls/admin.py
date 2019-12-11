@@ -5,13 +5,7 @@ from polls.models import Question, Choice
 
 class ChoiceInline(admin.TabularInline):
     """
-    답변 항목도 같이 등록하고 수정할 수 있게 추가한다.
-    Choice 모델을 위한 옵션 클래스를 만드는데
-    StackedInline 클래스를 상속받는다
-    만든 클래스를 QustionAdmin 클래스의 inlines 클래스 변수에 추가한다
-    
-    StackedInline은 화면이 아래로 길어지므로 불편하다.
-    TabularInline은 인라인 아이템을 테이블 형식으로 보여준다
+
     """
     model = Choice
     extra = 3  # 화면에서 몇 개가 보이는지 ?
@@ -19,14 +13,17 @@ class ChoiceInline(admin.TabularInline):
 
 class QuestionAdmin(admin.ModelAdmin):
     """
-    fieldsets 변수를 이용해 입력/수정 화면에서
-    각 항목들을 그룹화 하고, 그룹의 이름을 설정한다
-    (그룹이름, 그룹화항목들) ?
+    목록에 보이는 항목을 변경하려면
+    list_display 클래스 변수를 추가합니다
+    변수의 값은 튜플로 출력하고 싶은 항목을 묶어서 설정합니다
     """
     fieldsets = [
         (None, {'fields': ['question_text']}),
         ('Date information', {'fields': ['pub_date']}),
     ]
+
+    list_display = ('question_text','pub_date','was_published_recently')
+    # 클래스 변수/함수 가능 ?
 
     inlines = [ChoiceInline]
 
